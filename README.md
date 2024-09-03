@@ -3,7 +3,7 @@
 # Лабораторные работы
 1. [Стандарты кодирования](msdt-1/README.md)
 2. [Code review](msdt-2/README.md)
-3. [Regular expressions]()
+3. [Regular expressions](msdt-3/README.md)
 4. [Логирование]()
 5. [Unit tests]()
 6. [Профайлинг и оптимизация производительности]()
