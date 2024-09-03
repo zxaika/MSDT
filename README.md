@@ -2,7 +2,7 @@
 [Таблица с успеваемостью](https://docs.google.com/spreadsheets/d/1oh4tWvkQGYjn7s57W2iGPgOjnniBSi_4k-DBl3zaQ0s/edit?usp=sharing)
 # Лабораторные работы
 1. [Стандарты кодирования](msdt-1/README.md)
-2. [Code review]()
+2. [Code review](msdt-2/README.md)
 3. [Regular expressions]()
 4. [Логирование]()
 5. [Unit tests]()
