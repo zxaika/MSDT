@@ -13,6 +13,8 @@ on:
     types: [assigned, opened, synchronize, reopened]
     branches:
       - 'main'
+    paths:
+      - 'msdt-5/**'
 
 permissions:
   contents: read
