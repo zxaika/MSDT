@@ -13,6 +13,8 @@ on:
     types: [assigned, opened, synchronize, reopened]
     branches:
       - 'main'
+    paths:
+      - 'msdt-3/**'
       
 permissions:
   contents: write
@@ -28,7 +30,7 @@ jobs:
         name: acquiring your results
         id: your_results
         with:
-         file_path: "result.json"       
+         file_path: "msdt-3/result.json"       
       - name: displaying your results
         run: |
           echo "your variant: ${{steps.your_results.outputs.variant}}"
