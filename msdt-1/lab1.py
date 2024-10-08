@@ -30,7 +30,8 @@ class Tetris(QMainWindow):
     def center(self):
         screen = QDesktopWidget().screenGeometry()
         size = self.geometry()
-        self.move(int((screen.width() - size.width()) / 2), int((screen.height() - size.height()) / 2))
+        self.move(int((screen.width() - size.width()) / 2),
+                  int((screen.height() - size.height()) / 2))
 
 
 class Board(QFrame):
@@ -105,16 +106,22 @@ class Board(QFrame):
 
         for i in range(Board.board_height):
             for j in range(Board.board_width):
-                shape = self.shape_at(j, Board.board_height - i - 1)
+                shape = self.shape_at(j,
+                                      Board.board_height - i - 1)
 
                 if shape != Tetrominoe.no_shape:
-                    self.draw_square(painter, rect.left() + j * self.square_width(), boardTop + i * self.square_height(), shape)
+                    self.draw_square(painter,
+                                     rect.left() + j * self.square_width(),
+                                     boardTop + i * self.square_height(), shape)
 
         if self.cur_piece.shape() != Tetrominoe.no_shape:
             for i in range(4):
                 x = self.cur_x + self.cur_piece.x(i)
                 y = self.cur_y - self.cur_piece.y(i)
-                self.draw_square(painter, rect.left() + x * self.square_width(), boardTop + (Board.Board_height - y - 1) * self.square_height(), self.cur_piece.shape())
+                self.draw_square(painter,
+                                 rect.left() + x * self.square_width(),
+                                 boardTop + (Board.board_height - y - 1) * self.square_height(),
+                                 self.cur_piece.shape())
 
     def key_press_event(self, event):
         if not self.is_started or self.cur_piece.shape() == Tetrominoe.no_shape:
@@ -131,16 +138,24 @@ class Board(QFrame):
             return
 
         elif key == Qt.Key_Left:
-            self.try_move(self.cur_piece, self.cur_x - 1, self.cur_y)
+            self.try_move(self.cur_piece,
+                          self.cur_x - 1,
+                          self.cur_y)
 
         elif key == Qt.Key_Right:
-            self.try_move(self.cur_piece, self.cur_x + 1, self.cur_y)
+            self.try_move(self.cur_piece,
+                          self.cur_x + 1,
+                          self.cur_y)
 
         elif key == Qt.Key_Down:
-            self.try_move(self.cur_piece.rotate_right(), self.cur_x, self.cur_y)
+            self.try_move(self.cur_piece.rotate_right(),
+                          self.cur_x,
+                          self.cur_y)
 
         elif key == Qt.Key_Up:
-            self.try_move(self.cur_piece.rotate_left(), self.cur_x, self.cur_y)
+            self.try_move(self.cur_piece.rotate_left(),
+                          self.cur_x,
+                          self.cur_y)
 
         elif key == Qt.Key_Space:
             self.drop_down()
@@ -214,7 +229,9 @@ class Board(QFrame):
         self.cur_x = Board.board_width // 2 + 1
         self.cur_y = Board.board_height - 1 + self.cur_piece.min_y()
 
-        if not self.try_move(self.cur_piece, self.cur_x, self.cur_y):
+        if not self.try_move(self.cur_piece,
+                             self.cur_x,
+                             self.cur_y):
             self.cur_piece.set_shape(Tetrominoe.no_shape)
             self.timer.stop()
             self.is_started = False
@@ -242,15 +259,31 @@ class Board(QFrame):
         colorTable = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC,0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
 
         color = QColor(colorTable[shape])
-        painter.fill_rect(x + 1, y + 1, self.square_width() - 2, self.square_height() - 2, color)
+        painter.fill_rect(x + 1,
+                          y + 1,
+                          self.square_width() - 2,
+                          self.square_height() - 2,
+                          color)
 
         painter.set_pen(color.lighter())
-        painter.draw_line(x, y + self.square_height() - 1, x, y)
-        painter.draw_line(x, y, x + self.square_width() - 1, y)
+        painter.draw_line(x,
+                          y + self.square_height() - 1,
+                          x,
+                          y)
+        painter.draw_line(x,
+                          y,
+                          x + self.square_width() - 1,
+                          y)
 
         painter.set_pen(color.darker())
-        painter.draw_line(x + 1, y + self.square_height() - 1, x + self.square_width() - 1, y + self.square_height() - 1)
-        painter.draw_line(x + self.square_width() - 1, y + self.square_height() - 1, x + self.square_width() -1, y + 1)
+        painter.draw_line(x + 1,
+                          y + self.square_height() - 1,
+                          x + self.square_width() - 1,
+                          y + self.square_height() - 1)
+        painter.draw_line(x + self.square_width() - 1,
+                          y + self.square_height() - 1,
+                          x + self.square_width() -1,
+                          y + 1)
 
 
 class Tetrominoe:
@@ -319,8 +352,10 @@ class Shape:
         result = Shape()
         result.piece_shape = self.piece_shape
         for i in range(4):
-            result.set_x(i, self.y(i))
-            result.set_y(i, -self.x(i))
+            result.set_x(i,
+                         self.y(i))
+            result.set_y(i,
+                         -self.x(i))
         return result
 
     def rotate_right(self):
