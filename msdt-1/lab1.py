@@ -105,7 +105,7 @@ class Board(QFrame):
 
         for i in range(Board.BoardHeight):
             for j in range(Board.BoardWidth):
-                shape = self.shapeAt(j, Board.BoardHeight - i -1)
+                shape = self.shapeAt(j, Board.BoardHeight - i - 1)
 
                 if shape != Tetrominoe.NoShape:
                     self.drawSquare(painter, rect.left() + j * self.squareWidth(), boardTop + i * self.squareHeight(), shape)
@@ -131,10 +131,10 @@ class Board(QFrame):
             return
 
         elif key == Qt.Key_Left:
-            self.tryMove(self.curPiece, self.curX -1, self.curY)
+            self.tryMove(self.curPiece, self.curX - 1, self.curY)
 
         elif key == Qt.Key_Right:
-            self.tryMove(self.curPiece, self.curX +1, self.curY)
+            self.tryMove(self.curPiece, self.curX + 1, self.curY)
 
         elif key == Qt.Key_Down:
             self.tryMove(self.curPiece.rotateRight(), self.curX, self.curY)
@@ -168,14 +168,14 @@ class Board(QFrame):
         newY = self.curY
 
         while newY > 0:
-            if not self.tryMove(self.curPiece, self.curX, newY -1):
+            if not self.tryMove(self.curPiece, self.curX, newY - 1):
                 break
-            newY -=1
+            newY -= 1
 
         self.pieceDropped()
 
     def oneLineDown(self):
-        if not self.tryMove(self.curPiece, self.curX, self.curY -1):
+        if not self.tryMove(self.curPiece, self.curX, self.curY - 1):
             self.pieceDropped()
 
     def pieceDropped(self):
@@ -197,9 +197,9 @@ class Board(QFrame):
                 rowsToRemove.append(i)
 
         for row in rowsToRemove:
-            for i in range(row, Board.BoardHeight -1):
+            for i in range(row, Board.BoardHeight - 1):
                 for j in range(Board.BoardWidth):
-                    self.setShapeAt(j, i, self.shapeAt(j, i +1))
+                    self.setShapeAt(j, i, self.shapeAt(j, i + 1))
 
         if rowsToRemove:
             self.numLinesRemoved += len(rowsToRemove)
@@ -211,8 +211,8 @@ class Board(QFrame):
     def newPiece(self):
         self.curPiece = Shape()
         self.curPiece.setRandomShape()
-        self.curX = Board.BoardWidth //2 +1
-        self.curY = Board.BoardHeight -1 + self.curPiece.minY()
+        self.curX = Board.BoardWidth // 2 + 1
+        self.curY = Board.BoardHeight - 1 + self.curPiece.minY()
 
         if not self.tryMove(self.curPiece, self.curX, self.curY):
             self.curPiece.setShape(Tetrominoe.NoShape)
@@ -242,26 +242,26 @@ class Board(QFrame):
         colorTable = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC,0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
 
         color = QColor(colorTable[shape])
-        painter.fillRect(x +1, y +1, self.squareWidth() -2, self.squareHeight() -2, color)
+        painter.fillRect(x + 1, y + 1, self.squareWidth() - 2, self.squareHeight() - 2, color)
 
         painter.setPen(color.lighter())
-        painter.drawLine(x, y + self.squareHeight() -1, x, y)
-        painter.drawLine(x, y, x + self.squareWidth() -1, y)
+        painter.drawLine(x, y + self.squareHeight() - 1, x, y)
+        painter.drawLine(x, y, x + self.squareWidth() - 1, y)
 
         painter.setPen(color.darker())
-        painter.drawLine(x +1, y + self.squareHeight() -1, x + self.squareWidth() -1, y + self.squareHeight() -1)
-        painter.drawLine(x + self.squareWidth() -1, y + self.squareHeight() - 1, x + self.squareWidth() -1, y +1)
+        painter.drawLine(x + 1, y + self.squareHeight() - 1, x + self.squareWidth() - 1, y + self.squareHeight() - 1)
+        painter.drawLine(x + self.squareWidth() - 1, y + self.squareHeight() - 1, x + self.squareWidth() -1, y + 1)
 
 
 class Tetrominoe:
-    NoShape =0
-    ZShape =1
-    SShape =2
-    LineShape =3
-    TShape =4
-    SquareShape =5
-    LShape =6
-    MirroredLShape =7
+    NoShape = 0
+    ZShape = 1
+    SShape = 2
+    LineShape = 3
+    TShape = 4
+    SquareShape = 5
+    LShape = 6
+    MirroredLShape = 7
 
 
 class Shape:
