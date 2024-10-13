@@ -40,9 +40,9 @@ class Board(QFrame):
 
     msg2statusbar = pyqtSignal(str)
 
-    board_width = 10
-    board_height = 22
-    speed = 300
+    BOARD_WIDTH = 10
+    BOARD_HEIGHT = 22
+    SPEED = 300
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -64,19 +64,19 @@ class Board(QFrame):
 
 
     def shape_at(self, x, y):
-        return self.board[(y * Board.board_width) + x]
+        return self.board[(y * Board.BOARD_WIDTH) + x]
 
 
     def set_shape_at(self, x, y, shape):
-        self.board[(y * Board.board_width) + x] = shape
+        self.board[(y * Board.BOARD_WIDTH) + x] = shape
 
 
     def square_width(self):
-        return self.contents_rect().width() // Board.board_width
+        return self.contents_rect().width() // Board.BOARD_WIDTH
 
 
     def square_height(self):
-        return self.contents_rect().height() // Board.board_height
+        return self.contents_rect().height() // Board.BOARD_HEIGHT
 
 
     def start(self):
@@ -90,7 +90,7 @@ class Board(QFrame):
 
         self.msg2statusbar.emit(str(self.num_lines_removed))
         self.new_piece()
-        self.timer.start(Board.speed, self)
+        self.timer.start(Board.SPEED, self)
 
 
     def pause(self):
@@ -103,7 +103,7 @@ class Board(QFrame):
             self.timer.stop()
             self.msg2statusbar.emit("paused")
         else:
-            self.timer.start(Board.speed, self)
+            self.timer.start(Board.SPEED, self)
             self.msg2statusbar.emit(str(self.num_lines_removed))
 
         self.update()
@@ -112,30 +112,30 @@ class Board(QFrame):
     def paint_event(self, event):
         painter = QPainter(self)
         rect = self.contents_rect()
-        boardTop = rect.bottom() - Board.board_height * self.square_height()
+        boardTop = rect.bottom() - Board.BOARD_HEIGHT * self.square_height()
 
-        for i in range(Board.board_height):
-            for j in range(Board.board_width):
+        for i in range(Board.BOARD_HEIGHT):
+            for j in range(Board.BOARD_WIDTH):
                 shape = self.shape_at(j,
-                                      Board.board_height - i - 1)
+                                      Board.BOARD_HEIGHT - i - 1)
 
-                if shape != Tetrominoe.no_shape:
+                if shape != Tetrominoe.NO_SHAPE:
                     self.draw_square(painter,
                                      rect.left() + j * self.square_width(),
                                      boardTop + i * self.square_height(), shape)
 
-        if self.cur_piece.shape() != Tetrominoe.no_shape:
+        if self.cur_piece.shape() != Tetrominoe.NO_SHAPE:
             for i in range(4):
                 x = self.cur_x + self.cur_piece.x(i)
                 y = self.cur_y - self.cur_piece.y(i)
                 self.draw_square(painter,
                                  rect.left() + x * self.square_width(),
-                                 boardTop + (Board.board_height - y - 1) * self.square_height(),
+                                 boardTop + (Board.BOARD_HEIGHT - y - 1) * self.square_height(),
                                  self.cur_piece.shape())
 
 
     def key_press_event(self, event):
-        if not self.is_started or self.cur_piece.shape() == Tetrominoe.no_shape:
+        if not self.is_started or self.cur_piece.shape() == Tetrominoe.NO_SHAPE:
             super(Board, self).key_press_event(event)
             return
 
@@ -190,7 +190,7 @@ class Board(QFrame):
 
 
     def clear_board(self):
-        self.board = [Tetrominoe.no_shape] * (Board.board_height * Board.board_width)
+        self.board = [Tetrominoe.NO_SHAPE] * (Board.BOARD_HEIGHT * Board.BOARD_WIDTH)
 
 
     def drop_down(self):
@@ -224,33 +224,33 @@ class Board(QFrame):
     def remove_full_lines(self):
         rows_to_remove = []
 
-        for i in range(Board.board_height):
-            if all(self.shape_at(j, i) != Tetrominoe.no_shape for j in range(Board.board_width)):
+        for i in range(Board.BOARD_HEIGHT):
+            if all(self.shape_at(j, i) != Tetrominoe.NO_SHAPE for j in range(Board.BOARD_WIDTH)):
                 rows_to_remove.append(i)
 
         for row in rows_to_remove:
-            for i in range(row, Board.board_height - 1):
-                for j in range(Board.board_width):
+            for i in range(row, Board.BOARD_HEIGHT - 1):
+                for j in range(Board.BOARD_WIDTH):
                     self.set_shape_at(j, i, self.shape_at(j, i + 1))
 
         if rows_to_remove:
             self.num_lines_removed += len(rows_to_remove)
             self.msg2statusbar.emit(str(self.num_lines_removed))
             self.is_waiting_after_line = True
-            self.cur_piece.set_shape(Tetrominoe.no_shape)
+            self.cur_piece.set_shape(Tetrominoe.NO_SHAPE)
             self.update()
 
 
     def new_piece(self):
         self.cur_piece = Shape()
         self.cur_piece.set_random_shape()
-        self.cur_x = Board.board_width // 2 + 1
-        self.cur_y = Board.board_height - 1 + self.cur_piece.min_y()
+        self.cur_x = Board.BOARD_WIDTH // 2 + 1
+        self.cur_y = Board.BOARD_HEIGHT - 1 + self.cur_piece.min_y()
 
         if not self.try_move(self.cur_piece,
                              self.cur_x,
                              self.cur_y):
-            self.cur_piece.set_shape(Tetrominoe.no_shape)
+            self.cur_piece.set_shape(Tetrominoe.NO_SHAPE)
             self.timer.stop()
             self.is_started = False
             self.msg2statusbar.emit("Game over")
@@ -261,10 +261,10 @@ class Board(QFrame):
             x = new_x + new_piece.x(i)
             y = new_y - new_piece.y(i)
 
-            if x < 0 or x >= Board.board_width or y < 0 or y >= Board.board_height:
+            if x < 0 or x >= Board.BOARD_WIDTH or y < 0 or y >= Board.BOARD_HEIGHT:
                 return False
 
-            if self.shape_at(x, y) != Tetrominoe.no_shape:
+            if self.shape_at(x, y) != Tetrominoe.NO_SHAPE:
                 return False
 
         self.cur_piece = new_piece
@@ -307,18 +307,18 @@ class Board(QFrame):
 
 
 class Tetrominoe:
-    no_shape = 0
-    z_shape = 1
-    s_shape = 2
-    line_shape = 3
-    t_shape = 4
-    square_shape = 5
-    l_shape = 6
-    mirrored_l_shape = 7
+    NO_SHAPE = 0
+    Z_SHAPE = 1
+    S_SHAPE = 2
+    LINE_SHAPE = 3
+    T_SHAPE = 4
+    SQUARE_SHAPE = 5
+    L_SHAPE = 6
+    MIRRORED_L_SHAPE = 7
 
 
 class Shape:
-    coords_table = (
+    COORDS_TABLE = (
         ((0, 0), (0, 0), (0, 0), (0, 0)),
         ((0, -1), (0, 0), (-1, 0), (-1, 1)),
         ((0, -1), (0, 0), (1, 0), (1, 1)),
@@ -340,7 +340,7 @@ class Shape:
 
 
     def set_shape(self, shape):
-        table = Shape.coords_table[shape]
+        table = Shape.COORDS_TABLE[shape]
         for i in range(4):
             for j in range(2):
                 self.coords[i][j] = table[i][j]
@@ -376,7 +376,7 @@ class Shape:
 
 
     def rotate_left(self):
-        if self.piece_shape == Tetrominoe.square_shape:
+        if self.piece_shape == Tetrominoe.SQUARE_SHAPE:
             return self
 
         result = Shape()
@@ -390,7 +390,7 @@ class Shape:
 
 
     def rotate_right(self):
-        if self.piece_shape == Tetrominoe.square_shape:
+        if self.piece_shape == Tetrominoe.SQUARE_SHAPE:
             return self
 
         result = Shape()
