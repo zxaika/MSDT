@@ -1,5 +1,16 @@
 import pygame
 import numpy as np
+import logging
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.DEBUG,  # Уровень логирования
+    format='%(asctime)s - %(levelname)s - %(message)s',  # Формат сообщения
+    handlers=[
+        logging.FileHandler("project.log"),  # Записывать лог в файл
+        logging.StreamHandler()  # Также выводить в консоль
+    ]
+)
 
 # Константы
 WIDTH, HEIGHT = 800, 600
@@ -14,6 +25,10 @@ HEIGHT = float(input("Введите высоту цилиндра: "))
 N_SEGMENTS = 30  # Количество сегментов цилиндра по окружности
 M_SEGMENTS = 10  # Количество сегментов цилиндра по высоте
 
+# Логируем параметры
+logging.info(f"Радиус цилиндра: {RADIUS}, Высота цилиндра: {HEIGHT}, "
+             f"Сегменты по окружности: {N_SEGMENTS}, Сегменты по высоте: {M_SEGMENTS}")
+
 def project_point(x, y, z, d = 500):
     factor = d / (d + z)
     x_proj = int(WIDTH / 2 + x * factor)
@@ -21,6 +36,7 @@ def project_point(x, y, z, d = 500):
     return x_proj, y_proj
 
 def generate_cylinder(radius, height, n_segments, m_segments):
+    logging.info("Генерация цилиндра...")
     vertices = []
     edges = []
     polygons = []
@@ -43,6 +59,7 @@ def generate_cylinder(radius, height, n_segments, m_segments):
             edges.append((curr, top))
             polygons.append((curr, next_, next_top, top))
 
+    logging.info(f"Цилиндр сгенерирован: {len(vertices)} вершин, {len(edges)} ребер, {len(polygons)} полигонов.")
     return vertices, edges, polygons
 
 def translate(vertices, dx, dy, dz):
@@ -90,32 +107,46 @@ while running:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         position[1] += 5
+        logging.debug("Движение вверх по оси Y")
     if keys[pygame.K_s]:
         position[1] -= 5
+        logging.debug("Движение вниз по оси Y")
     if keys[pygame.K_a]:
         position[0] -= 5
+        logging.debug("Движение влево по оси X")
     if keys[pygame.K_d]:
         position[0] += 5
+        logging.debug("Движение вправо по оси X")
     if keys[pygame.K_r]:
         position[2] += 5
+        logging.debug("Движение вперед по оси Z")
     if keys[pygame.K_f]:
         position[2] -= 5
+        logging.debug("Движение назад по оси Z")
     if keys[pygame.K_y]:
         scale_factor = [sf * 1.05 for sf in scale_factor]
+        logging.debug("Масштабирование объекта (увеличение)")
     if keys[pygame.K_x]:
         scale_factor = [sf * 0.95 for sf in scale_factor]
+        logging.debug("Масштабирование объекта (уменьшение)")
     if keys[pygame.K_LEFT]:
         angle_y -= 0.05
+        logging.debug("Поворот объекта по оси Y влево")
     if keys[pygame.K_RIGHT]:
         angle_y += 0.05
+        logging.debug("Поворот объекта по оси Y вправо")
     if keys[pygame.K_UP]:
         angle_x -= 0.05
+        logging.debug("Поворот объекта по оси X вверх")
     if keys[pygame.K_DOWN]:
         angle_x += 0.05
+        logging.debug("Поворот объекта по оси X вниз")
     if keys[pygame.K_q]:
         angle_z -= 0.05
+        logging.debug("Поворот объекта по оси Z влево")
     if keys[pygame.K_e]:
         angle_z += 0.05
+        logging.debug("Поворот объекта по оси Z вправо")
 
     screen.fill(WHITE)
 
@@ -138,4 +169,5 @@ while running:
     pygame.display.flip()
     clock.tick(FPS)
 
+logging.info("Программа завершена")
 pygame.quit()
