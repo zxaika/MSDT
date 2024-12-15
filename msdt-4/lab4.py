@@ -1,23 +1,23 @@
 import pygame
 import numpy as np
 
-WIDTH, HEIGHT = 800,600
+WIDTH, HEIGHT = 800, 600
 FPS = 60
-WHITE = (255,255, 255)
-BLACK = (0, 0,0)
-CYAN = (0, 255,255)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+CYAN = (0, 255, 255)
 
-# Запрос данныз цилиндра
+# Запрос данных цилиндра
 R = float(input("Введите радиус цилиндра: "))
 H = float(input("Введите высоту цилиндра: "))
-N =30  # Количество сегментов
-M =10  # Количество сегментов по высоте
+N = 30  # Количество сегментов
+M = 10  # Количество сегментов по высоте
 
 # Центральная(перспективная) проекция
-def project_point(x, y, z, d=500):
-    factor = d/(d+z)
-    x_proj = int(WIDTH/2+x*factor)
-    y_proj = int(HEIGHT/2-y*factor)
+def project_point(x, y, z, d = 500):
+    factor = d / (d + z)
+    x_proj = int(WIDTH / 2 + x * factor)
+    y_proj = int(HEIGHT / 2 - y * factor)
     return x_proj, y_proj
 
 # Генерация цилиндра
@@ -86,22 +86,22 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # обрабатываем нажатие клавищ
+    # обрабатываем нажатие клавиш
     keys = pygame.key.get_pressed()
 
     # Для перемещения
     if keys[pygame.K_w]:
-        position[1] +=5
+        position[1] += 5
     if keys[pygame.K_s]:
-        position[1] -=5
+        position[1] -= 5
     if keys[pygame.K_a]:
-        position[0] -=5
+        position[0] -= 5
     if keys[pygame.K_d]:
-        position[0] +=5
+        position[0] += 5
     if keys[pygame.K_r]:
-        position[2] +=5
+        position[2] += 5
     if keys[pygame.K_f]:
-        position[2] -=5
+        position[2] -= 5
 
     # Для масштабирования
     if keys[pygame.K_y]:
@@ -111,17 +111,17 @@ while running:
 
     # Вращение
     if keys[pygame.K_LEFT]:
-        angle_y -=0.05
+        angle_y -= 0.05
     if keys[pygame.K_RIGHT]:
-        angle_y +=0.05
+        angle_y += 0.05
     if keys[pygame.K_UP]:
-        angle_x -=0.05
+        angle_x -= 0.05
     if keys[pygame.K_DOWN]:
-        angle_x +=0.05
+        angle_x += 0.05
     if keys[pygame.K_q]:
-        angle_z -=0.05
+        angle_z -= 0.05
     if keys[pygame.K_e]:
-        angle_z +=0.05
+        angle_z += 0.05
 
     # Очистка экрана
     screen.fill(WHITE)
