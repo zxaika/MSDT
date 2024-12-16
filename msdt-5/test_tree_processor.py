@@ -70,3 +70,8 @@ def test_tree_input_from_file(processor):
     import os
     os.remove(tmpfile_path)
 
+def test_tree_with_large_valid_input(processor):
+    # большое дерево с большим количеством данных
+    input_data = "1," + ",".join(str(i) for i in range(2, 100001)) + ",null"
+    # проверка корректности работы программы
+    assert processor.process_input(input_data) == 50000
