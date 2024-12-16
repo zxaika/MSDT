@@ -1,4 +1,6 @@
 import pytest
+import tempfile
+
 
 from tree_processor import TreeProcessor  # Импортируем класс TreeProcessor
 
@@ -49,3 +51,22 @@ def test_tree_with_null_as_root(processor):
     # результат: "Дерево пустое"
     input_data = "null"
     assert processor.process_input(input_data) == "Дерево пустое"
+
+def test_tree_input_from_file(processor):
+    # временный файл с данными дерева
+    input_data = "1,2,3,null,null,4,5"
+
+    with tempfile.NamedTemporaryFile(delete=False, mode='w') as tmpfile:
+        tmpfile.write(input_data)
+        tmpfile_path = tmpfile.name
+
+    with open(tmpfile_path, 'r') as file:
+        data = file.read().strip()
+
+    # проверка на правильность обработки программы
+    assert processor.process_input(data) == 3
+
+    # удаление
+    import os
+    os.remove(tmpfile_path)
+
